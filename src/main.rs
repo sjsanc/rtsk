@@ -28,3 +28,11 @@ fn main() {
 // rtsk list --tags "rust" // list all tasks with the tag "rust"
 // rtsk list --priority high // list all tasks with the priority "high"
 // rstk list --priority > high // list all tasks with the priority greater than "high"
+
+// Tasks can be produced under a project
+// Projects provide a new id of the type <shortcode>-<id>
+// Everything is kept in the same Redis db
+
+// The issue is that Tasks need an easy way to be selected
+// We want to give them an easy ID, but also a UUID
+// Projects need the same thing. But they can't have the same IDs, so IDs need to be more than just I32

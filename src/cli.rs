@@ -1,6 +1,9 @@
 use clap::{Parser, Subcommand};
 
-use crate::logic::{complete_task, create_task, delete_task, list_tasks, TaskArgs};
+use crate::logic::{
+    complete_task, create_project, create_task, delete_task, get_entity, list_projects, list_tasks,
+    EntityId, TaskArgs,
+};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -24,6 +27,27 @@ pub enum Commands {
     Delete {
         id: i32,
     },
+    Get {
+        query: String,
+    },
+    Projects {
+        #[command(subcommand)]
+        command: ProjectsCommands,
+    },
+}
+
+#[derive(Subcommand)]
+pub enum ProjectsCommands {
+    New {
+        name: String,
+
+        #[arg(short, long)]
+        shortcode: String,
+
+        #[arg(short, long)]
+        description: Option<String>,
+    },
+    List {},
 }
 
 pub fn execute_command(cli: Cli, conn: &mut redis::Connection) {
@@ -40,5 +64,20 @@ pub fn execute_command(cli: Cli, conn: &mut redis::Connection) {
         Commands::Delete { id } => {
             let _ = delete_task(id, conn);
         }
+        Commands::Get { query } => {
+            let _ = get_entity(query, conn);
+        }
+        Commands::Projects { command } => match command {
+            ProjectsCommands::New {
+                name,
+                description,
+                shortcode,
+            } => {
+                let _ = create_project(name, shortcode, description.clone(), conn);
+            }
+            ProjectsCommands::List {} => {
+                let _ = list_projects(conn);
+            }
+        },
     }
 }

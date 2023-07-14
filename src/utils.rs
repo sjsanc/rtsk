@@ -59,6 +59,13 @@ pub fn get_due_or_default(due: &Option<String>) -> Option<DateTime<Utc>> {
     }
 }
 
+pub fn get_tags_or_default(tags: &Option<String>) -> Vec<String> {
+    match tags {
+        Some(s) => s.split(",").map(|s| s.to_string()).collect(),
+        None => Vec::new(),
+    }
+}
+
 pub fn parse_date_from_str(date_str: &String) -> Result<DateTime<Utc>, chrono::ParseError> {
     let naive_date = NaiveDate::parse_from_str(&date_str, "%d/%m/%Y")?;
     let naive_datetime = naive_date.and_hms_opt(0, 0, 0);

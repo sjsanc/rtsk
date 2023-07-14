@@ -45,6 +45,16 @@ pub fn display_age(t: &DateTime<Utc>) -> String {
     format_time_difference(*t, Utc::now())
 }
 
+pub fn display_tags(tags: &Vec<String>) -> String {
+    let mut tags_str = String::new();
+
+    for tag in tags {
+        tags_str.push_str(&format!("{} ", tag));
+    }
+
+    tags_str
+}
+
 pub fn print_tasks(tasks: &Vec<Task>, color: Option<Color>) {
     let mut table = Table::new(tasks);
     table.with(Style::rounded());

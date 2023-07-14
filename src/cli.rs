@@ -1,8 +1,7 @@
 use clap::{Parser, Subcommand};
 
 use crate::logic::{
-    complete_task, create_project, create_task, delete_task, get_entity, list_projects, list_tasks,
-    EntityId, TaskArgs,
+    complete_task, create_project, create_task, delete_task, list_projects, list_tasks, TaskArgs,
 };
 
 #[derive(Parser)]
@@ -26,9 +25,6 @@ pub enum Commands {
     },
     Delete {
         id: i32,
-    },
-    Get {
-        query: String,
     },
     Projects {
         #[command(subcommand)]
@@ -63,9 +59,6 @@ pub fn execute_command(cli: Cli, conn: &mut redis::Connection) {
         }
         Commands::Delete { id } => {
             let _ = delete_task(id, conn);
-        }
-        Commands::Get { query } => {
-            let _ = get_entity(query, conn);
         }
         Commands::Projects { command } => match command {
             ProjectsCommands::New {
